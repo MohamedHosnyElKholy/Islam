@@ -3,18 +3,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RadioContext } from '../context/radioContext';
 import { Spinner } from 'flowbite-react'; // استيراد Spinner
 
-// تعريف نوع RadioItem بناءً على هيكل البيانات الخاص بك
-interface RadioItem {
-    id: number;         // رقم الهوية
-    name: string;       // اسم الإذاعة
-    img: string;        // رابط الصورة
-    url: string;        // رابط الإذاعة
-}
-
 export default function Page() {
     const { getAllRadio } = useContext(RadioContext);
-    const [allRadios, setAllRadios] = useState<RadioItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true); // حالة التحميل
+    const [allRadios, setAllRadios] = useState([]);
+    const [loading, setLoading] = useState(true); // حالة التحميل
 
     const getRadio = async () => {
         try {

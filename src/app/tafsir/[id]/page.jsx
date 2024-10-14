@@ -5,21 +5,13 @@ import { useParams } from "next/navigation";
 import { tafsirContext } from "../../context/tafsirContext";
 import { Spinner } from "flowbite-react"; // استيراد Spinner
 
-// تعريف نوع TafsirItem بناءً على هيكل البيانات الخاص بك
-interface TafsirItem {
-  id: number;           // رقم الهوية
-  aya: string;         // الآية
-  arabic_text: string; // النص العربي
-  translation: string; // التفسير
-}
-
 export default function Page() {
-  const { id } = useParams<{ id: string }>(); // تحديد نوع id
+  const { id } = useParams(); // تحديد نوع id
   const { getAllTafsir } = useContext(tafsirContext);
-  const [allProduct, setAllProduct] = useState<TafsirItem[]>([]); // استخدام النوع المناسب
-  const [loading, setLoading] = useState<boolean>(true); // حالة التحميل
+  const [allProduct, setAllProduct] = useState([]); // استخدام النوع المناسب
+  const [loading, setLoading] = useState(true); // حالة التحميل
 
-  const handleGetTafsir = async (id: number) => {
+  const handleGetTafsir = async (id) => {
     try {
       const data = await getAllTafsir(id);
       if (data) {

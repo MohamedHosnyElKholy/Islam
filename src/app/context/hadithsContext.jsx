@@ -2,26 +2,17 @@
 import axios from "axios";
 import { createContext, ReactNode } from "react";
 
-interface Hadith {
-  id: number;
-  number: number;
-  arab: string;
-}
-
-interface HadithsContextType {
-  getAllHadiths: () => Promise<Hadith[] | null>;
-}
-
-const defaultContextValue: HadithsContextType = {
+// تعيين قيمة افتراضية للسياق
+const defaultContextValue = {
   getAllHadiths: async () => Promise.resolve(null),
 };
 
-export const hadithsContext = createContext<HadithsContextType>(defaultContextValue);
+export const hadithsContext = createContext(defaultContextValue);
 
-export default function HadithsContextProvider({ children }: { children: ReactNode }) {
-  const getAllHadiths = async (): Promise<Hadith[] | null> => {
+export default function HadithsContextProvider({ children }) {
+  const getAllHadiths = async () => {
     try {
-      const res = await axios.get<{ data: Hadith[] }>(
+      const res = await axios.get(
         `https://hadis-api-id.vercel.app/hadith/abu-dawud?page=2&limit=300`
       );
       return res.data; // إرجاع البيانات

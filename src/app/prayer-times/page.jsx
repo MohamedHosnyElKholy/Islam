@@ -3,15 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { TimeContext } from "../context/tiemContext";
 import { Spinner } from "flowbite-react"; // استيراد الـ Spinner
 
-// تعريف نوع البيانات التي سيتم استرجاعها
-interface TimingData {
-  [key: string]: string; // المفتاح هو نص والقيمة هي نص
-}
-
 const DataComponent = () => {
   const { getAllTiems } = useContext(TimeContext);
-  const [allProduct, setAllProduct] = useState<TimingData | null>(null); // تحديد النوع
-  const [loading, setLoading] = useState<boolean>(true); // حالة التحميل
+  const [allProduct, setAllProduct] = useState(null); // تحديد النوع
+  const [loading, setLoading] = useState(true); // حالة التحميل
 
   const getProduct = async () => {
     try {

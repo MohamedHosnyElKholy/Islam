@@ -4,20 +4,11 @@ import { QuranContext } from "../context/quranContext";
 import Link from "next/link";
 import { Spinner } from "flowbite-react"; // استيراد الـ Spinner
 
-// تعريف نوع Surah بناءً على هيكل البيانات الخاص بك
-interface Surah {
-  number: number;          // رقم السورة
-  name: string;            // اسم السورة باللغة العربية
-  englishName: string;     // اسم السورة باللغة الإنجليزية
-  numberOfAyahs: number;   // عدد الآيات
-  revelationType: string;   // نوع الوحي
-}
-
 export default function Page() {
   const { getAllQuran } = useContext(QuranContext);
-  const [allSuras, setAllSuras] = useState<Surah[]>([]);
-  const [search, setSearch] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [allSuras, setAllSuras] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchQuran = async () => {
     setLoading(true); // بدء حالة التحميل
