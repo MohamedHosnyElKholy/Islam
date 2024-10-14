@@ -6,18 +6,19 @@ export default function Page() {
   const { getAllAdkar } = useContext(AdkarContext);
   const [allProduct, setAllProduct] = useState([]);
 
-  const getQuran = async () => {
-    try {
-      const data = await getAllAdkar();
-      setAllProduct(data);
-    } catch (error) {
-      console.error("فشل في جلب البيانات", error);
-    }
-  };
+
 
   useEffect(() => {
+    const getQuran = async () => {
+      try {
+        const data = await getAllAdkar();
+        setAllProduct(data);
+      } catch (error) {
+        console.error("فشل في جلب البيانات", error);
+      }
+    }
     getQuran();
-  }, []);
+  }, [getAllAdkar]);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen mt-[50px]">

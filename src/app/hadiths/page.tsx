@@ -9,21 +9,22 @@ export default function Page() {
   const [serch, setserch] = useState("");
   const [loading, setloading] = useState(false);
 
-  const getProduct = async () => {
-    try {
-      setloading(true);
-      const data = await getAllhadiths();
-      setAllProduct(data);
-    } catch (error) {
-      console.error("فشل في جلب الأحاديث", error);
-    } finally {
-      setloading(false);
-    }
-  };
+
 
   useEffect(() => {
+    const getProduct = async () => {
+      try {
+        setloading(true);
+        const data = await getAllhadiths();
+        setAllProduct(data);
+      } catch (error) {
+        console.error("فشل في جلب الأحاديث", error);
+      } finally {
+        setloading(false);
+      }
+    };
     getProduct();
-  }, []);
+  }, [getAllhadiths]);
 
   const filterHadith = allProduct?.data?.items?.filter((el) =>
     String(el.number).includes(serch)

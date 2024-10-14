@@ -27,7 +27,7 @@ export default function Page() {
   }, [id]);
 
   return (
-    <div className="p-8 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg shadow-lg">
+    <div className="p-8 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg shadow-lg mt-[30px]">
       {loading ? (
         <div className="flex justify-center">
           <Spinner
