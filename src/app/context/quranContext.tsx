@@ -1,38 +1,48 @@
 "use client";
 import axios from "axios";
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useContext } from "react";
 
 // تحديد نوع البيانات في السياق
+interface Surah {
+  number: number;
+  name: string;
+  englishName: string;
+  numberOfAyahs: number;
+  revelationType: string;
+}
+
+interface QuranResponse {
+  data: Surah[];
+}
+
 interface QuranContextType {
-  getAllTiems: () => Promise<any>; // يمكنك تحديد نوع البيانات التي تريد إرجاعها
+  getAllQuran: () => Promise<QuranResponse | null>;
 }
 
 // تعيين قيمة افتراضية للسياق
 const defaultContextValue: QuranContextType = {
-  getAllTiems: async () => Promise.resolve(null), // قيمة افتراضية
+  getAllQuran: async () => Promise.resolve(null),
 };
 
 export const QuranContext = createContext<QuranContextType>(defaultContextValue);
 
-export default function QuranContextProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const getAllQuran = async () => {
+export default function QuranContextProvider({ children }: { children: ReactNode }) {
+  const getAllQuran = async (): Promise<QuranResponse | null> => {
     try {
-      const res = await axios.get(
-        `https://api.alquran.cloud/v1/surah`
-      );
-      return res; // Assuming you want to return the data directly
+      const res = await axios.get<QuranResponse>('https://api.alquran.cloud/v1/surah');
+      return res.data; // Return the data directly
     } catch (err) {
       console.error(err);
+      return null; // Return null on error
     }
   };
 
   return (
     <QuranContext.Provider value={{ getAllQuran }}>
-            {children}   {" "}
+      {children}
     </QuranContext.Provider>
   );
 }
+
+// يمكنك إضافة دالة لاستخدام السياق
+export const useQuranContext = () => useContext(QuranContext);

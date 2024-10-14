@@ -6,38 +6,41 @@ import { Spinner } from "flowbite-react"; // استيراد الـ Spinner
 
 export default function Page() {
   const { getAllQuran } = useContext(QuranContext);
-  const [allProduct, setAllProduct] = useState([]);
-  const [serch, setserch] = useState("");
-  const [loading, setLoading] = useState(true); // حالة التحميل
+  const [allSuras, setAllSuras] = useState<Surah[]>([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const getQuran = async () => {
+  const fetchQuran = async () => {
+    setLoading(true); // Start loading state
     try {
       const data = await getAllQuran();
-      setAllProduct(data);
+      if (data) {
+        setAllSuras(data.data); // Set the surah array
+      }
     } catch (error) {
       console.error("فشل في جلب البيانات", error);
     } finally {
-      setLoading(false); // إنهاء حالة التحميل
+      setLoading(false); // End loading state
     }
   };
 
   useEffect(() => {
-    getQuran();
+    fetchQuran();
   }, []);
 
-  const filteredSuras = allProduct?.data?.data?.filter(
-    (el) => el.name.includes(serch) || el.englishName.includes(serch)
+  const filteredSuras = allSuras.filter(
+    (el) => el.name.includes(search) || el.englishName.includes(search)
   );
 
   return (
-    <div className="p-6 bg-gray-100 rounded-lg shadow-lg max-w-6xl mx-auto mt-10">
+    <div className="p-6 bg-gray-100 rounded-lg shadow-lg max-w-6xl mx-auto  mt-[100px]">
       <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
         سور القرآن الكريم
       </h1>
       <input
         type="text"
-        value={serch}
-        onChange={(e) => setserch(e.target.value)}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
         placeholder="ابحث عن سورة..."
         className="mb-4 p-2 border rounded w-full"
       />
@@ -46,10 +49,10 @@ export default function Page() {
           <Spinner
             color="warning"
             aria-label="Loading spinner"
-            style={{ width: "3rem", height: "3rem" }} // تعديل الحجم
+            style={{ width: "3rem", height: "3rem" }}
           />
         </div>
-      ) : filteredSuras?.length > 0 ? (
+      ) : filteredSuras.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredSuras.map((el) => (
             <Link

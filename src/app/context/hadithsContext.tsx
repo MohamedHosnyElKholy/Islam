@@ -2,37 +2,38 @@
 import axios from "axios";
 import { createContext, ReactNode } from "react";
 
-// تحديد نوع البيانات في السياق
-interface hadithsContextType {
-  getAllTiems: () => Promise<any>; // يمكنك تحديد نوع البيانات التي تريد إرجاعها
+interface Hadith {
+  id: number;
+  number: number;
+  arab: string;
 }
 
-// تعيين قيمة افتراضية للسياق
-const defaultContextValue: hadithsContextType = {
-  getAllTiems: async () => Promise.resolve(null), // قيمة افتراضية
+interface HadithsContextType {
+  getAllHadiths: () => Promise<Hadith[] | null>;
+}
+
+const defaultContextValue: HadithsContextType = {
+  getAllHadiths: async () => Promise.resolve(null),
 };
 
-export const hadithsContext = createContext<hadithsContextType>(defaultContextValue);
+export const hadithsContext = createContext<HadithsContextType>(defaultContextValue);
 
-export default function HadithsContextProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const getAllhadiths = async () => {
+export default function HadithsContextProvider({ children }: { children: ReactNode }) {
+  const getAllHadiths = async (): Promise<Hadith[] | null> => {
     try {
-      const res = await axios.get(
+      const res = await axios.get<{ data: Hadith[] }>(
         `https://hadis-api-id.vercel.app/hadith/abu-dawud?page=2&limit=300`
       );
-      return res; // Assuming you want to return the data directly
+      return res.data; // إرجاع البيانات
     } catch (err) {
-      console.error(err);
+      console.error("فشل في جلب الأحاديث", err);
+      return null; 
     }
   };
 
   return (
-    <hadithsContext.Provider value={{ getAllhadiths}}>
-            {children}
+    <hadithsContext.Provider value={{ getAllHadiths }}>
+      {children}
     </hadithsContext.Provider>
   );
 }

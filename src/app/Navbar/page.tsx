@@ -13,7 +13,7 @@ export default function Page() {
 
   return (
     <>
-      <nav className="bg-white border-b border-gray-300 shadow-md dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0">
+      <nav className="bg-white border-b border-gray-300 shadow-md dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-[111111111111]">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link href="/" className="flex items-center">
             <Image 

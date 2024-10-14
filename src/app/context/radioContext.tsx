@@ -1,38 +1,48 @@
 "use client";
 import axios from "axios";
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useContext } from "react";
 
 // تحديد نوع البيانات في السياق
+interface RadioItem {
+  id: number;
+  name: string;
+  frequency: string;
+  img: string; // إضافة حقل للصورة
+  url: string; // إضافة حقل لرابط الاستماع
+}
+
+interface RadioResponse {
+  radios: RadioItem[]; // تغيير نوع البيانات لتتوافق مع الهيكل
+}
+
 interface RadioContextType {
-  getAllTiems: () => Promise<any>; // يمكنك تحديد نوع البيانات التي تريد إرجاعها
+  getAllRadio: () => Promise<RadioResponse | null>;
 }
 
 // تعيين قيمة افتراضية للسياق
 const defaultContextValue: RadioContextType = {
-  getAllTiems: async () => Promise.resolve(null), // قيمة افتراضية
+  getAllRadio: async () => Promise.resolve(null),
 };
 
 export const RadioContext = createContext<RadioContextType>(defaultContextValue);
 
-export default function RadioContextProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const getAllRadio = async () => {
+export default function RadioContextProvider({ children }: { children: ReactNode }) {
+  const getAllRadio = async (): Promise<RadioResponse | null> => {
     try {
-      const res = await axios.get(
-        `https://data-rosy.vercel.app/radio.json`
-      );
-      return res; // Assuming you want to return the data directly
+      const res = await axios.get<RadioResponse>("https://data-rosy.vercel.app/radio.json");
+      return res.data;
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching radio data:", err);
+      return null;
     }
   };
 
   return (
     <RadioContext.Provider value={{ getAllRadio }}>
-            {children}
+      {children}
     </RadioContext.Provider>
   );
 }
+
+// استخدام السياق
+export const useRadioContext = () => useContext(RadioContext);

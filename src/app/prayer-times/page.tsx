@@ -5,13 +5,13 @@ import { Spinner } from "flowbite-react"; // استيراد الـ Spinner
 
 const DataComponent = () => {
   const { getAllTiems } = useContext(TimeContext);
-  const [allProduct, setAllProduct] = useState([]);
+  const [allProduct, setAllProduct] = useState<{ [key: string]: string } | null>(null); // تحديد النوع
   const [loading, setLoading] = useState(true); // حالة التحميل
 
   const getProduct = async () => {
     try {
       const data = await getAllTiems();
-      setAllProduct(data);
+      setAllProduct(data ? data.data.timings : null); // تحديث حالة المنتج
     } catch (error) {
       console.error("فشل في جلب المواقيت", error);
     } finally {
@@ -23,10 +23,10 @@ const DataComponent = () => {
     getProduct();
   }, []);
 
-  const allTiiems = Object.entries(allProduct?.data?.data?.timings || {});
+  const allTiiems = Object.entries(allProduct || {}); // الحصول على المدخلات
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto mt-10">
+    <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto mt-[100px]">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">مواقيت الصلاة</h2>
       {loading ? (
         <div className="flex justify-center items-center">

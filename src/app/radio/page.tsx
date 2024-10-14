@@ -1,17 +1,19 @@
-'use client';
+'use client'
 import React, { useContext, useEffect, useState } from 'react';
-import { RadioContext } from './../context/radioContext';
+import { RadioContext } from '../context/radioContext';
 import { Spinner } from 'flowbite-react'; // استيراد Spinner
 
 export default function Page() {
     const { getAllRadio } = useContext(RadioContext);
-    const [allProduct, setAllProduct] = useState([]);
+    const [allRadios, setAllRadios] = useState<RadioItem[]>([]);
     const [loading, setLoading] = useState(true); // حالة التحميل
 
     const getRadio = async () => {
         try {
             const data = await getAllRadio();
-            setAllProduct(data);
+            if (data) {
+                setAllRadios(data.radios); // استخدام data.radios مباشرة
+            }
         } catch (error) {
             console.error("فشل في جلب البيانات", error);
         } finally {
@@ -24,7 +26,7 @@ export default function Page() {
     }, []);
 
     return (
-        <div className="p-6 bg-gray-50 mt-[50px]">
+        <div className="p-6 bg-gray-50  mt-[100px]">
             <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">قائمة الإذاعات</h2>
             {loading ? (
                 <div className="flex justify-center">
@@ -36,7 +38,7 @@ export default function Page() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {allProduct?.data?.radios?.map((el) => (
+                    {allRadios.map((el) => (
                         <div key={el.id} className="flex flex-col items-center mb-4 p-4 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
                             <img 
                                 src={el.img} 

@@ -6,15 +6,17 @@ import { tafsirContext } from "../../context/tafsirContext";
 import { Spinner } from "flowbite-react"; // استيراد Spinner
 
 export default function Page() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>(); // تحديد نوع id
   const { getAllTafsir } = useContext(tafsirContext);
-  const [allProduct, setAllProduct] = useState([]);
+  const [allProduct, setAllProduct] = useState<TafsirItem[]>([]); // استخدام النوع المناسب
   const [loading, setLoading] = useState(true); // حالة التحميل
 
-  const handleGetTafsir = async (id) => {
+  const handleGetTafsir = async (id: number) => {
     try {
       const data = await getAllTafsir(id);
-      setAllProduct(data);
+      if (data) {
+        setAllProduct(data.result); // استخدام data.result مباشرة
+      }
     } catch (error) {
       console.error("فشل في جلب البيانات", error);
     } finally {
@@ -23,11 +25,11 @@ export default function Page() {
   };
 
   useEffect(() => {
-    handleGetTafsir(id);
+    handleGetTafsir(parseInt(id)); // تحويل id إلى عدد صحيح
   }, [id]);
 
   return (
-    <div className="p-8 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg shadow-lg mt-[30px]">
+    <div className="p-8 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg shadow-lg  mt-[100px]">
       {loading ? (
         <div className="flex justify-center">
           <Spinner
@@ -37,7 +39,7 @@ export default function Page() {
           />
         </div>
       ) : (
-        allProduct?.data?.result?.map((el) => (
+        allProduct.map((el) => (
           <div
             key={el.id}
             className="mb-6 p-6 border border-blue-300 rounded-lg bg-white shadow-md transition-transform transform hover:scale-105"
