@@ -4,23 +4,32 @@ import { QuranContext } from "../context/quranContext";
 import Link from "next/link";
 import { Spinner } from "flowbite-react"; // استيراد الـ Spinner
 
+// تعريف نوع Surah بناءً على هيكل البيانات الخاص بك
+interface Surah {
+  number: number;          // رقم السورة
+  name: string;            // اسم السورة باللغة العربية
+  englishName: string;     // اسم السورة باللغة الإنجليزية
+  numberOfAyahs: number;   // عدد الآيات
+  revelationType: string;   // نوع الوحي
+}
+
 export default function Page() {
   const { getAllQuran } = useContext(QuranContext);
   const [allSuras, setAllSuras] = useState<Surah[]>([]);
-  const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchQuran = async () => {
-    setLoading(true); // Start loading state
+    setLoading(true); // بدء حالة التحميل
     try {
       const data = await getAllQuran();
       if (data) {
-        setAllSuras(data.data); // Set the surah array
+        setAllSuras(data.data); // تعيين مصفوفة السور
       }
     } catch (error) {
       console.error("فشل في جلب البيانات", error);
     } finally {
-      setLoading(false); // End loading state
+      setLoading(false); // إنهاء حالة التحميل
     }
   };
 
@@ -33,7 +42,7 @@ export default function Page() {
   );
 
   return (
-    <div className="p-6 bg-gray-100 rounded-lg shadow-lg max-w-6xl mx-auto  mt-[100px]">
+    <div className="p-6 bg-gray-100 rounded-lg shadow-lg max-w-6xl mx-auto mt-[100px]">
       <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
         سور القرآن الكريم
       </h1>

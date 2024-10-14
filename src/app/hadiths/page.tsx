@@ -3,6 +3,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { hadithsContext } from "../context/hadithsContext";
 import { Spinner } from "flowbite-react";
 
+// تعريف نوع Hadith بناءً على هيكل البيانات الخاص بك
+interface Hadith {
+  id: number;         // نفترض أن 'id' هو رقم، قم بالتعديل إذا كان نصًا
+  number: number;     // نفترض أن 'number' هو رقم
+  arab: string;       // نفترض أن 'arab' هو نص
+}
+
 export default function Page() {
   const { getAllHadiths } = useContext(hadithsContext);
   const [allHadiths, setAllHadiths] = useState<Hadith[]>([]);
@@ -26,11 +33,11 @@ export default function Page() {
     fetchHadiths();
   }, [getAllHadiths]);
 
-  console.log(allHadiths)
-
-  const filteredHadiths  = allHadiths?.items?.filter((el) =>
+  const filteredHadiths = allHadiths?.items?.filter((el) =>
     String(el.number).includes(search)
   );
+
+  console.log(allHadiths)
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen mt-[50px]">

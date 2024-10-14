@@ -1,12 +1,20 @@
-'use client'
+'use client';
 import React, { useContext, useEffect, useState } from 'react';
 import { RadioContext } from '../context/radioContext';
 import { Spinner } from 'flowbite-react'; // استيراد Spinner
 
+// تعريف نوع RadioItem بناءً على هيكل البيانات الخاص بك
+interface RadioItem {
+    id: number;         // رقم الهوية
+    name: string;       // اسم الإذاعة
+    img: string;        // رابط الصورة
+    url: string;        // رابط الإذاعة
+}
+
 export default function Page() {
     const { getAllRadio } = useContext(RadioContext);
     const [allRadios, setAllRadios] = useState<RadioItem[]>([]);
-    const [loading, setLoading] = useState(true); // حالة التحميل
+    const [loading, setLoading] = useState<boolean>(true); // حالة التحميل
 
     const getRadio = async () => {
         try {
@@ -26,7 +34,7 @@ export default function Page() {
     }, []);
 
     return (
-        <div className="p-6 bg-gray-50  mt-[100px]">
+        <div className="p-6 bg-gray-50 mt-[100px]">
             <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">قائمة الإذاعات</h2>
             {loading ? (
                 <div className="flex justify-center">

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import axios, { AxiosResponse } from "axios";
 import { createContext, ReactNode } from "react";
 
@@ -8,7 +8,6 @@ interface Adkar {
   ARABIC_TEXT: string;
   AUDIO?: string; // يمكن أن تكون فارغة
   REPEAT: number;
-  // أضف أي حقول أخرى حسب الحاجة
 }
 
 interface AdkarResponse {
@@ -32,7 +31,7 @@ export default function AdkarContextProvider({ children }: { children: ReactNode
       const res: AxiosResponse<AdkarResponse> = await axios.get(
         `https://www.hisnmuslim.com/api/ar/27.json`
       );
-      return res.data.adkar; // إرجاع مصفوفة الأذكار
+      return res; // إرجاع مصفوفة الأذكار
     } catch (err) {
       console.error("فشل في جلب الأذكار", err);
       return null; // تأكد من إرجاع null في حالة حدوث خطأ
