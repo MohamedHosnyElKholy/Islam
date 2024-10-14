@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { createContext, ReactNode } from "react";
 
 // تحديد نوع البيانات في السياق
@@ -9,6 +9,10 @@ interface Adkar {
   AUDIO?: string; // يمكن أن تكون فارغة
   REPEAT: number;
   // أضف أي حقول أخرى حسب الحاجة
+}
+
+interface AdkarResponse {
+  adkar: Adkar[]; // الهيكل المتوقع للبيانات
 }
 
 interface AdkarContextType {
@@ -25,8 +29,10 @@ export const AdkarContext = createContext<AdkarContextType>(defaultContextValue)
 export default function AdkarContextProvider({ children }: { children: ReactNode }) {
   const getAllAdkar = async (): Promise<Adkar[] | null> => {
     try {
-      const res = await axios.get(`https://www.hisnmuslim.com/api/ar/27.json`);
-      return res; // إرجاع الكائن الكامل
+      const res: AxiosResponse<AdkarResponse> = await axios.get(
+        `https://www.hisnmuslim.com/api/ar/27.json`
+      );
+      return res.data.adkar; // إرجاع مصفوفة الأذكار
     } catch (err) {
       console.error("فشل في جلب الأذكار", err);
       return null; // تأكد من إرجاع null في حالة حدوث خطأ
